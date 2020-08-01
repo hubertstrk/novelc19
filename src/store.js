@@ -8,7 +8,8 @@ export default new Vuex.Store({
   state: {
     world: null,
     countries: null,
-    searchText: ''
+    searchText: '',
+    modeSelection: 'total' // total, today
   },
   mutations: {
     storeWorld (state, data) {
@@ -19,6 +20,9 @@ export default new Vuex.Store({
     },
     setSearch (state, text) {
       state.searchText = text
+    },
+    setModeSelection (state, modeSelection) {
+      state.modeSelection = modeSelection
     }
   },
   actions: {

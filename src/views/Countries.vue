@@ -2,8 +2,20 @@
   <div class="countries-component">
     <h1 class="title">Countries</h1>
 
+    <b-field>
+      <b-radio-button v-model="mode" type="is-primary"
+        native-value="total">
+        <span>Total</span>
+      </b-radio-button>
+
+      <b-radio-button v-model="mode" type="is-primary"
+        native-value="today">
+        <span>Today</span>
+      </b-radio-button>
+    </b-field>
+
     <section>
-      <b-input placeholder="Search..."
+      <b-input placeholder="Country..."
         type="search"
         icon="magnify"
         v-model="search">
@@ -15,7 +27,8 @@
       <b-table paginated
         :data="countries"
         :mobile-cards="hasMobileCards"
-        narrowed per-page="50"
+        per-page="50"
+        striped hoverable scrollable
       >
         <template slot-scope="data">
           <b-table-column field="country" label="Country" sortable>
@@ -23,32 +36,32 @@
               {{ data.row.country }}
             </router-link>
           </b-table-column>
-          <b-table-column field="cases" label="Total Cases" sortable>
+          <b-table-column field="cases" :label="capitalize(`${mode} Cases`)" sortable numeric>
             <NumericDisplay>
-              {{ data.row.cases }}
+              {{ data.row[`${mode}Cases`] }}
             </NumericDisplay>
           </b-table-column>
-          <b-table-column field="deaths" label="Total Deaths" sortable>
+          <b-table-column field="deaths" :label="capitalize(`${mode} Deaths`)" sortable numeric>
             <NumericDisplay>
-              {{ data.row.deaths }}
+              {{ data.row[`${mode}Deaths`] }}
             </NumericDisplay>
           </b-table-column>
-          <b-table-column field="todayCases" label="Today Cases" sortable>
+          <b-table-column field="critical" label="Critical" sortable numeric>
             <NumericDisplay>
-              {{ data.row.todayCases }}
+              {{ data.row.critical }}
             </NumericDisplay>
           </b-table-column>
-          <b-table-column field="todayDeaths" label="Today Deaths" sortable>
-            <NumericDisplay>
-              {{ data.row.todayDeaths }}
-            </NumericDisplay>
-          </b-table-column>
-          <b-table-column field="testsPerOneMillion" label="Test per million" sortable>
+          <b-table-column field="testsPerOneMillion" label="Tests per million" sortable numeric>
             <NumericDisplay>
               {{ data.row.testsPerOneMillion }}
             </NumericDisplay>
           </b-table-column>
-          <b-table-column field="population" label="Population" sortable>
+          <b-table-column field="oneTestPerPeople" label="One test per people" sortable numeric>
+            <NumericDisplay>
+              {{ data.row.oneTestPerPeople }}
+            </NumericDisplay>
+          </b-table-column>
+          <b-table-column field="population" label="Population" numeric>
             <NumericDisplay>
               {{ data.row.population }}
             </NumericDisplay>
@@ -62,7 +75,7 @@
 
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
-import { preciseSquash } from '@/js/helper'
+import { preciseSquash, capitalize } from '@/js/helper'
 
 import NumericDisplay from '@/components/NumericDisplay'
 import RenderlessCountriesStatistics from '@/components/RenderlessCountriesStatistics'
@@ -80,18 +93,26 @@ export default {
   },
   computed: {
     ...mapState({
-      searchText: state => state.search
+      searchText: state => state.search,
+      modeSelection: state => state.modeSelection
     }),
     search: {
       get () { return this.searchText },
       set (value) { this.setSearch(value) }
+    },
+    mode: {
+      get () { return this.modeSelection },
+      set (value) { this.setModeSelection(value) }
     }
   },
   methods: {
     ...mapActions(['loadCountries']),
-    ...mapMutations(['setSearch']),
+    ...mapMutations(['setSearch', 'setModeSelection']),
     formatNumber (value) {
       return preciseSquash`${value}`
+    },
+    capitalize (value) {
+      return capitalize(value)
     }
   },
   created () {
