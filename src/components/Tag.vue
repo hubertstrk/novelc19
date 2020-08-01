@@ -1,23 +1,12 @@
 <template>
-  <div class="control">
-    <b-taglist attached>
-      <b-tag  type="is-black">{{text}}</b-tag>
-      <b-tag type="is-info">{{ value | format }}</b-tag>
-    </b-taglist>
-  </div>
+  <b-taglist attached>
+    <b-tag  type="is-black">{{value1}}</b-tag>
+    <b-tag type="is-info">{{value2}}</b-tag>
+  </b-taglist>
 </template>
 
 <script>
-import { isoToDate, isoToTime } from '@/js/helper'
 export default {
-  props: ['text', 'value'],
-  filters: {
-    format (value) {
-      return `${isoToDate(value)}, ${isoToTime(value)}`
-    }
-  }
+  props: ['value1', 'value2']
 }
 </script>
-
-<style lang="scss" scoped>
-</style>

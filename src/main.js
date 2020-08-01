@@ -7,6 +7,8 @@ import './registerServiceWorker'
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 
+import './css/global.css'
+
 Vue.use(Buefy)
 
 Vue.config.productionTip = false

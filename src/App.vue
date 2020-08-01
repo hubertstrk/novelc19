@@ -17,7 +17,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#app {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
 .view {
+  display: flex;
   padding: 10px;
 }
 </style>

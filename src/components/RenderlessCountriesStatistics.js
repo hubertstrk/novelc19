@@ -1,20 +1,13 @@
-import { mapState, mapActions } from 'vuex'
-
+import { mapState } from 'vuex'
 export default {
   render () {
     return this.$scopedSlots.default({
-      statistics: this.statistics
+      countries: this.countries ? this.countries : []
     })
   },
   computed: {
     ...mapState({
-      statistics: state => state.countries
+      countries: state => state.countries
     })
-  },
-  methods: {
-    ...mapActions(['loadCountries'])
-  },
-  created () {
-    this.loadCountries()
   }
 }
