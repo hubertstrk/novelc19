@@ -7,7 +7,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     world: null,
-    countries: null
+    countries: null,
+    searchText: ''
   },
   mutations: {
     storeWorld (state, data) {
@@ -15,6 +16,9 @@ export default new Vuex.Store({
     },
     storeCountries (state, data) {
       state.countries = data
+    },
+    setSearch (state, text) {
+      state.searchText = text
     }
   },
   actions: {

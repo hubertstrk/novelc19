@@ -1,13 +1,21 @@
 <template>
   <div class="countries-component">
     <h1 class="title">Countries</h1>
+
+    <section>
+      <b-input placeholder="Search..."
+        type="search"
+        icon="magnify"
+        v-model="search">
+      </b-input>
+    </section>
+
     <RenderlessCountriesStatistics>
       <div slot-scope="{countries}">
-      <b-table
-        paginated pagination-simple
-        narrowed per-page="50"
+      <b-table paginated
         :data="countries"
         :mobile-cards="hasMobileCards"
+        narrowed per-page="50"
       >
         <template slot-scope="data">
           <b-table-column field="country" label="Country" sortable>
@@ -53,7 +61,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import { preciseSquash } from '@/js/helper'
 
 import NumericDisplay from '@/components/NumericDisplay'
@@ -63,15 +71,25 @@ export default {
   name: 'countries',
   data () {
     return {
-      hasMobileCards: true
+      hasMobileCards: false
     }
   },
   components: {
     NumericDisplay,
     RenderlessCountriesStatistics
   },
+  computed: {
+    ...mapState({
+      searchText: state => state.search
+    }),
+    search: {
+      get () { return this.searchText },
+      set (value) { this.setSearch(value) }
+    }
+  },
   methods: {
     ...mapActions(['loadCountries']),
+    ...mapMutations(['setSearch']),
     formatNumber (value) {
       return preciseSquash`${value}`
     }
