@@ -36,12 +36,12 @@
               {{ data.row.country }}
             </router-link>
           </b-table-column>
-          <b-table-column field="cases" :label="capitalize(`${mode} Cases`)" sortable numeric>
+          <b-table-column :field="`${mode}Cases`" :label="capitalize(`${mode} Cases`)" sortable numeric>
             <NumericDisplay>
               {{ data.row[`${mode}Cases`] }}
             </NumericDisplay>
           </b-table-column>
-          <b-table-column field="deaths" :label="capitalize(`${mode} Deaths`)" sortable numeric>
+          <b-table-column :field="`${mode}Deaths`" :label="capitalize(`${mode} Deaths`)" sortable numeric>
             <NumericDisplay>
               {{ data.row[`${mode}Deaths`] }}
             </NumericDisplay>
@@ -51,12 +51,12 @@
               {{ data.row.critical }}
             </NumericDisplay>
           </b-table-column>
-          <b-table-column field="testsPerOneMillion" label="Tests per million" sortable numeric>
+          <b-table-column field="testsPerOneMillion" label="Tests / million" sortable numeric>
             <NumericDisplay>
               {{ data.row.testsPerOneMillion }}
             </NumericDisplay>
           </b-table-column>
-          <b-table-column field="oneTestPerPeople" label="One test per people" sortable numeric>
+          <b-table-column field="oneTestPerPeople" label="One test / people" sortable numeric>
             <NumericDisplay>
               {{ data.row.oneTestPerPeople }}
             </NumericDisplay>
