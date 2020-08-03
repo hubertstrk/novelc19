@@ -1,0 +1,87 @@
+<template>
+  <div class="chart-container">
+    <canvas ref="chart" />
+  </div>
+</template>
+
+<script>
+import { sparseSquash } from '@/js/helper'
+
+import Chart from 'chart.js'
+
+export default {
+  props: {
+    timelines: {
+      type: Array,
+      default: () => []
+    }
+  },
+  data () {
+    return {
+      chart: null,
+      options: {
+        legend: {
+          display: this.legend
+        },
+        elements: {
+          line: {
+            tension: 0
+          }
+        },
+        animation: {
+          duration: 0
+        },
+        hover: {
+          animationDuration: 0
+        },
+        responsiveAnimationDuration: 0,
+        aspectRatio: 1,
+        responsive: true,
+        scales: {
+          xAxes: [{
+            type: 'time',
+            display: true
+          }],
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+              callback: (value, index, values) => {
+                return sparseSquash`${value}`
+              }
+            },
+            display: true,
+            scaleLabel: {
+              display: false
+            }
+          }]
+        }
+      }
+    }
+  },
+  methods: {
+    renderChart () {
+      var chart = new Chart(this.$refs.chart, {
+        type: 'bar',
+        data: { datasets: this.timelines },
+        options: Object.assign({}, this.options)
+      })
+      this.chart = chart
+    },
+    updateDataSets (timelines) {
+      this.chart.data.datasets = timelines
+      this.chart.update(0)
+    }
+  },
+  mounted () {
+    this.renderChart()
+  },
+  watch: {
+    datasets (timelines) {
+      this.updateDataSets(timelines)
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+</style>

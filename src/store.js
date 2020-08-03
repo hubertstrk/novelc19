@@ -8,6 +8,7 @@ export default new Vuex.Store({
   state: {
     world: null,
     countries: null,
+    timeline: {},
     searchText: '',
     modeSelection: 'total' // total, today
   },
@@ -17,6 +18,9 @@ export default new Vuex.Store({
     },
     storeCountries (state, data) {
       state.countries = data
+    },
+    storeTimeline (state, { country, timeline }) {
+      Vue.set(state.timeline, country, timeline)
     },
     setSearch (state, text) {
       state.searchText = text
@@ -38,6 +42,13 @@ export default new Vuex.Store({
         .then(data => data.data)
         .then((data) => {
           commit('storeCountries', data)
+        })
+    },
+    async loadCountry ({ commit }, country) {
+      return axios.get(`https://corona.lmao.ninja/v2/historical/${country}?lastdays=365`)
+        .then(data => data.data)
+        .then((data) => {
+          commit('storeTimeline', { country: data.country, timeline: data.timeline })
         })
     }
   }

@@ -19,7 +19,7 @@ export default new Router({
       component: () => import('./views/Countries.vue')
     },
     {
-      path: '/country',
+      path: '/country/:country',
       name: 'country',
       component: () => import('./views/Country.vue')
     },

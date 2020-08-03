@@ -32,7 +32,7 @@
       >
         <template slot-scope="data">
           <b-table-column field="country" label="Country" sortable>
-            <router-link :to="{ name: 'country', params: {code: data.row.country} }">
+            <router-link :to="{ name: 'country', params: {country: data.row.country} }">
               {{ data.row.country }}
             </router-link>
           </b-table-column>
