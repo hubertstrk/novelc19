@@ -1,7 +1,5 @@
 <template>
-  <div class="chart-container">
-    <canvas ref="chart" />
-  </div>
+  <canvas ref="chart" class="chart" />
 </template>
 
 <script>
@@ -21,7 +19,7 @@ export default {
       chart: null,
       options: {
         legend: {
-          display: this.legend
+          display: true
         },
         elements: {
           line: {
@@ -84,4 +82,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.chart {
+  //height: 100%;
+  //width: 100%;
+}
 </style>

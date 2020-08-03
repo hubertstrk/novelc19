@@ -1,10 +1,19 @@
 <template>
-  <div>
+  <div class="country-component">
     <RenderlessCountryStatistics :country="this.$route.params.country">
-      <div slot-scope="{timelines}" class="chart">
-        <GenericTimelineChart :timelines="timelines.casesForChart" />
-        <GenericTimelineChart :timelines="timelines.deathsForChart" />
-        <GenericTimelineChart :timelines="timelines.recoveredForChart" />
+      <div slot-scope="{timelines}">
+        <GenericTimelineChart :timelines="[
+          { label: 'Deaths', data: timelines.deaths.relative.timeline, order: 2 },
+          { label: 'Mean', data: timelines.deaths.relative.mean, type: 'line', borderColor: 'red', pointRadius: 0, fill: false, order: 1 }
+        ]" />
+        <GenericTimelineChart :timelines="[
+          { label: 'Cases', data: timelines.cases.relative.timeline, order: 2 },
+          { label: 'Mean', data: timelines.cases.relative.mean, type: 'line', borderColor: 'blue', pointRadius: 0, fill: false, order: 1 }
+        ]" />
+        <GenericTimelineChart :timelines="[
+          { label: 'Recovered', data: timelines.recovered.relative.timeline, order: 2 },
+          { label: 'Mean', data: timelines.recovered.relative.mean, type: 'line', borderColor: 'green', pointRadius: 0, fill: false, order: 1 }
+        ]" />
       </div>
     </RenderlessCountryStatistics>
   </div>
@@ -37,7 +46,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.chart {
+.country-component {
   display: flex;
+  flex: 1;
 }
+
 </style>

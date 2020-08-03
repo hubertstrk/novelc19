@@ -45,7 +45,7 @@ export default new Vuex.Store({
         })
     },
     async loadCountry ({ commit }, country) {
-      return axios.get(`https://corona.lmao.ninja/v2/historical/${country}?lastdays=365`)
+      return axios.get(`https://corona.lmao.ninja/v2/historical/${country}?lastdays=all`)
         .then(data => data.data)
         .then((data) => {
           commit('storeTimeline', { country: data.country, timeline: data.timeline })

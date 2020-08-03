@@ -1,20 +1,36 @@
 import { mapState } from 'vuex'
-// import { SlidingWindow } from '@/js/SlidingWindow'
-import { capitalize } from '@/js/helper'
+import { SlidingWindow } from '@/js/SlidingWindow'
+import { DataList } from '@/js/DataList'
 
 export default {
   props: {
     country: null
   },
   render () {
-    if (!this.raw) return {}
+    if (!this.timeline || !this.timeline[this.country]) return
+    const raw = this.timeline[this.country]
 
-    const tymap = (type) => (x) => ({ t: x, y: this.raw[type][x] })
+    const dvmap = (type) => (x) => ({ date: x, value: raw[type][x] })
+    const tymap = item => ({ t: item.date, y: item.value })
+    const highmap = item => ({ t: item.date, y: item.high })
+    const lowmap = item => ({ t: item.date, y: item.low })
 
     const timelines = ['cases', 'deaths', 'recovered'].reduce((acc, type) => {
-      const timeline = Object.keys(this.raw[type]).map(tymap(type))
-      acc[type] = timeline
-      acc[`${type}ForChart`] = [{ label: capitalize(type), data: timeline }]
+      const dataPoints = Object.keys(raw[type]).map(dvmap(type))
+      const dataList = new DataList(dataPoints)
+      const mean = new SlidingWindow(dataList.relativ(), 7).mean()
+
+      acc[type] = {
+        absolute: {
+          timeline: dataList.absolute().map(tymap)
+        },
+        relative: {
+          timeline: dataList.relativ().map(tymap),
+          mean: mean.map(tymap),
+          high: mean.map(highmap),
+          low: mean.map(lowmap)
+        }
+      }
       return acc
     }, {})
 
@@ -27,9 +43,6 @@ export default {
   computed: {
     ...mapState({
       timeline: state => state.timeline
-    }),
-    raw () {
-      return this.timeline[this.country]
-    }
+    })
   }
 }
