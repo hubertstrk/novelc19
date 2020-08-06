@@ -8,28 +8,13 @@ const searchOptions = {
 
 export default {
   render () {
-    var countries = this.filtered.map(x => {
+    var countries = this.filtered.map(country => {
       return {
-        totalActive: x.active,
-        activePerOneMillion: x.activePerOneMillion,
-        totalCases: x.cases,
-        casesPerOneMillion: x.casesPerOneMillion,
-        country: x.country,
-        countryInfo: x.countryInfo,
-        critical: x.critical,
-        criticalPerOneMillion: x.criticalPerOneMillion,
-        totalDeaths: x.deaths,
-        deathsPerOneMillion: x.deathsPerOneMillion,
-        oneTestPerPeople: x.oneTestPerPeople,
-        population: x.population,
-        totalRecovered: x.recovered,
-        recoveredPerOneMillion: x.recoveredPerOneMillion,
-        tests: x.tests,
-        testsPerOneMillion: x.testsPerOneMillion,
-        todayCases: x.todayCases,
-        todayDeaths: x.todayDeaths,
-        todayRecovered: x.todayRecovered,
-        updated: x.updated
+        ...country,
+        totalActive: country.active,
+        totalCases: country.cases,
+        totalDeaths: country.deaths,
+        totalRecovered: country.recovered
       }
     })
     return this.$scopedSlots.default({

@@ -1,6 +1,33 @@
 <template>
   <div class="country-component">
     <RenderlessCountryStatistics :country="this.$route.params.country">
+      <div slot-scope="{country}">
+        <h1 class="title  is-1">{{country.country}}</h1>
+
+        <div class="info-group">
+          <Tag success :value1="formatDate(country.updated)" :value2="formatTime(country.updated)" />
+          <Tag danger value1="Population" :value2="formatNumber(country.population)" />
+        </div>
+
+        <div class="info-group statistics">
+          <StatisticsCard text="Total Cases" :value="country.cases" />
+          <StatisticsCard text="Total Recovered" :value="country.recovered" />
+          <StatisticsCard text="Total Deaths" :value="country.deaths" />
+        </div>
+        <div class="info-group statistics">
+          <StatisticsCard text="Today Cases" :value="country.todayCases" />
+          <StatisticsCard text="Today Recovered" :value="country.todayRecovered" />
+          <StatisticsCard text="Today Deaths" :value="country.todayDeaths" />
+        </div>
+        <div class="info-group statistics">
+          <StatisticsCard text="Tests Per Million" :value="country.testsPerOneMillion" />
+          <StatisticsCard text="Deaths Per Million" :value="country.deathsPerOneMillion" />
+          <StatisticsCard text="One Test Per People" :value="country.oneTestPerPeople" />
+        </div>
+      </div>
+    </RenderlessCountryStatistics>
+
+    <RenderlessCountryTimeline :country="this.$route.params.country">
       <div slot-scope="{timelines}">
         <GenericTimelineChart :timelines="[
           { label: 'Deaths', data: timelines.deaths.relative.timeline, order: 2 },
@@ -15,40 +42,85 @@
           { label: 'Mean', data: timelines.recovered.relative.mean, type: 'line', borderColor: 'green', pointRadius: 0, fill: false, order: 1 }
         ]" />
       </div>
-    </RenderlessCountryStatistics>
+    </RenderlessCountryTimeline>
+
+    <!-- <RenderlessCountryTimeline :country="this.$route.params.country">
+      <div slot-scope="{timelines}">
+        <div v-for="data in timelines" :key="data.date">
+          {{ data.date }} | {{ data.value }}
+        </div>
+      </div>
+    </RenderlessCountryTimeline> -->
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 
+import { isoToDate, isoToTime, preciseSquash } from '@/js/helper'
+
+import Tag from '@/components/Tag'
+import StatisticsCard from '@/components/StatisticsCard'
+
 import GenericTimelineChart from '@/chart/GenericTimelineChart'
+import RenderlessCountryTimeline from '@/components/RenderlessCountryTimeline'
 import RenderlessCountryStatistics from '@/components/RenderlessCountryStatistics'
 
 export default {
   name: 'country',
   components: {
+    Tag,
+    StatisticsCard,
     GenericTimelineChart,
+    RenderlessCountryTimeline,
     RenderlessCountryStatistics
   },
   methods: {
     ...mapActions([
-      'loadCountry'
-    ])
+      'loadCountryTimeline',
+      'loadCountries'
+    ]),
+    formatDate (value) {
+      return `${isoToDate(value)}`
+    },
+    formatTime (value) {
+      return `${isoToTime(value)}`
+    },
+    formatNumber (value) {
+      return preciseSquash`${value}`
+    }
   },
   async mounted () {
-    await this.loadCountry(this.$route.params.country)
+    await this.loadCountryTimeline(this.$route.params.country)
+    await this.loadCountries()
   },
   beforeRouteUpdate (to, from, next) {
-    this.loadCountry(to.country)
+    this.loadCountryTimeline(to.country)
+    this.loadCountries()
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .country-component {
-  display: flex;
-  flex: 1;
-}
 
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  .info-group {
+
+    display: flex;
+    align-items: baseline;
+
+    > * {
+      margin-right: 10px;
+    }
+
+    &.statistics {
+      justify-content: space-evenly;
+    }
+
+  }
+}
 </style>

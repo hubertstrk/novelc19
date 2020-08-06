@@ -51,21 +51,6 @@
               {{ data.row.critical }}
             </NumericDisplay>
           </b-table-column>
-          <b-table-column field="testsPerOneMillion" label="Tests / million" sortable numeric>
-            <NumericDisplay>
-              {{ data.row.testsPerOneMillion }}
-            </NumericDisplay>
-          </b-table-column>
-          <b-table-column field="oneTestPerPeople" label="One test / people" sortable numeric>
-            <NumericDisplay>
-              {{ data.row.oneTestPerPeople }}
-            </NumericDisplay>
-          </b-table-column>
-          <b-table-column field="population" label="Population" numeric>
-            <NumericDisplay>
-              {{ data.row.population }}
-            </NumericDisplay>
-          </b-table-column>
         </template>
       </b-table>
     </div>

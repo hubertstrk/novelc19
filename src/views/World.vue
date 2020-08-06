@@ -3,7 +3,7 @@
     <h1 class="title">World</h1>
     <RenderlessWorldStatistics>
       <div slot-scope="{statistics}">
-        <Tag :value1="formatDate(statistics.updated)" :value2="formatTime(statistics.updated)" />
+        <Tag success :value1="formatDate(statistics.updated)" :value2="formatTime(statistics.updated)" />
         <div class="statistics-group">
           <StatisticsCard text="Affected countries" :value="statistics.affectedCountries" />
           <StatisticsCard text="Tests per million" :value="statistics.testsPerOneMillion" />
@@ -26,7 +26,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { isoToDate, isoToTime, sparseSquash } from '@/js/helper'
+import { isoToDate, isoToTime } from '@/js/helper'
 
 import Tag from '@/components/Tag'
 import StatisticsCard from '@/components/StatisticsCard'
@@ -46,9 +46,6 @@ export default {
     },
     formatTime (value) {
       return `${isoToTime(value)}`
-    },
-    formatNumber (value) {
-      return sparseSquash`${value}`
     }
   },
   created () {
