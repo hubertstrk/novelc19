@@ -2,7 +2,7 @@
   <div class="country-component">
     <RenderlessCountryStatistics :country="this.$route.params.country">
       <div slot-scope="{country}">
-        <h1 class="title  is-1">{{country.country}}</h1>
+        <h1 class="title is-1">{{country.country}}</h1>
 
         <div class="info-group">
           <Tag success :value1="formatDate(country.updated)" :value2="formatTime(country.updated)" />
@@ -10,19 +10,19 @@
         </div>
 
         <div class="info-group statistics">
-          <StatisticsCard text="Total Cases" :value="country.cases" />
-          <StatisticsCard text="Total Recovered" :value="country.recovered" />
-          <StatisticsCard text="Total Deaths" :value="country.deaths" />
+          <StatisticsCard text="Total Cases" :value="country.cases" centered />
+          <StatisticsCard text="Total Recovered" :value="country.recovered" centered />
+          <StatisticsCard text="Total Deaths" :value="country.deaths" centered />
         </div>
         <div class="info-group statistics">
-          <StatisticsCard text="Today Cases" :value="country.todayCases" />
-          <StatisticsCard text="Today Recovered" :value="country.todayRecovered" />
-          <StatisticsCard text="Today Deaths" :value="country.todayDeaths" />
+          <StatisticsCard text="Today Cases" :value="country.todayCases" centered />
+          <StatisticsCard text="Today Recovered" :value="country.todayRecovered" centered />
+          <StatisticsCard text="Today Deaths" :value="country.todayDeaths" centered />
         </div>
         <div class="info-group statistics">
-          <StatisticsCard text="Tests Per Million" :value="country.testsPerOneMillion" />
-          <StatisticsCard text="Deaths Per Million" :value="country.deathsPerOneMillion" />
-          <StatisticsCard text="One Test Per People" :value="country.oneTestPerPeople" />
+          <StatisticsCard text="Tests Per Million" :value="country.testsPerOneMillion" centered />
+          <StatisticsCard text="Deaths Per Million" :value="country.deathsPerOneMillion" centered />
+          <StatisticsCard text="One Test Per People" :value="country.oneTestPerPeople" centered />
         </div>
       </div>
     </RenderlessCountryStatistics>
@@ -109,7 +109,8 @@ export default {
     }
 
     &.statistics {
-      justify-content: space-evenly;
+      justify-content: space-around;
+      margin: 2rem 0;
     }
 
   }

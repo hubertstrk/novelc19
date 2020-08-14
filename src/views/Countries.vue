@@ -1,5 +1,6 @@
 <template>
   <div class="countries-component">
+    <b-loading :is-full-page="isFullPage" :active.sync="isLoading" />
     <h1 class="title">Countries</h1>
 
     <b-field>
@@ -24,36 +25,39 @@
 
     <RenderlessCountriesStatistics>
       <div slot-scope="{countries}">
-      <b-table paginated
-        :data="countries"
-        :mobile-cards="hasMobileCards"
-        per-page="50"
-        striped hoverable scrollable
-      >
-        <template slot-scope="data">
-          <b-table-column field="country" label="Country" sortable>
-            <router-link :to="{ name: 'country', params: {country: data.row.country} }">
-              {{ data.row.country }}
-            </router-link>
-          </b-table-column>
-          <b-table-column :field="`${mode}Cases`" :label="capitalize(`${mode} Cases`)" sortable numeric>
-            <NumericDisplay>
-              {{ data.row[`${mode}Cases`] }}
-            </NumericDisplay>
-          </b-table-column>
-          <b-table-column :field="`${mode}Deaths`" :label="capitalize(`${mode} Deaths`)" sortable numeric>
-            <NumericDisplay>
-              {{ data.row[`${mode}Deaths`] }}
-            </NumericDisplay>
-          </b-table-column>
-          <!-- <b-table-column field="critical" label="Critical" sortable numeric>
-            <NumericDisplay>
-              {{ data.row.critical }}
-            </NumericDisplay>
-          </b-table-column> -->
-        </template>
-      </b-table>
-    </div>
+        <div v-for="(country, index) in countries" :key="index">
+
+          <RenderlessCountryTimeline :country="country.country">
+            <div slot-scope="{timelines}">
+             <CountryCard :title="country.country" :population="country.population" :deaths="country[`${mode}Deaths`]" :cases="country[`${mode}Cases`]">
+               <template #info>
+                 <trend
+                    :data="timelines.cases.relative.mean.map(x => x.y)"
+                    :gradient="['#3a86ff', '#3a86ff', '#b8f2e6']"
+                    :padding="spark.padding"
+                    :radius="spark.radius"
+                    :stroke-width="spark.width"
+                    :stroke-linecap="spark.butt"
+                    auto-draw
+                    smooth
+                  />
+                  <trend
+                    :data="timelines.deaths.relative.mean.map(x => x.y)"
+                    :gradient="['#f94144', '#f94144', '#ffbe88']"
+                    :padding="spark.padding"
+                    :radius="spark.radius"
+                    :stroke-width="spark.width"
+                    :stroke-linecap="spark.linecap"
+                    auto-draw
+                    smooth
+                  />
+               </template>
+             </CountryCard>
+            </div>
+          </RenderlessCountryTimeline>
+
+        </div>
+      </div>
     </RenderlessCountriesStatistics>
   </div>
 </template>
@@ -62,19 +66,28 @@
 import { mapState, mapMutations, mapActions } from 'vuex'
 import { preciseSquash, capitalize } from '@/js/helper'
 
-import NumericDisplay from '@/components/NumericDisplay'
+import CountryCard from '@/components/CountryCard'
 import RenderlessCountriesStatistics from '@/components/RenderlessCountriesStatistics'
+import RenderlessCountryTimeline from '@/components/RenderlessCountryTimeline'
 
 export default {
   name: 'countries',
   data () {
     return {
-      hasMobileCards: false
+      spark: {
+        padding: 3,
+        radius: 12,
+        width: 6,
+        linecap: 'butt'
+      },
+      isFullPage: true,
+      isLoading: false
     }
   },
   components: {
-    NumericDisplay,
-    RenderlessCountriesStatistics
+    CountryCard,
+    RenderlessCountriesStatistics,
+    RenderlessCountryTimeline
   },
   computed: {
     ...mapState({
@@ -91,7 +104,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['loadCountries']),
+    ...mapActions(['loadCountries', 'loadCountryTimelines']),
     ...mapMutations(['setSearch', 'setModeSelection']),
     formatNumber (value) {
       return preciseSquash`${value}`
@@ -100,8 +113,11 @@ export default {
       return capitalize(value)
     }
   },
-  created () {
-    this.loadCountries()
+  async created () {
+    this.isLoading = true
+    const countries = await this.loadCountries()
+    await this.loadCountryTimelines(countries.slice(0, 50))
+    this.isLoading = false
   }
 }
 </script>
@@ -110,5 +126,6 @@ export default {
 .countries-component {
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 </style>

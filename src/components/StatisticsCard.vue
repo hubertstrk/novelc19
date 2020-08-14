@@ -1,14 +1,27 @@
 <template>
-  <div class="statistics-card has-text-centered">
-    <p class="heading">{{text}}</p>
-    <p class="title is-5">{{ value | format }}</p>
+  <div class="statistics-card" :class="centered ? 'has-text-centered' : ''">
+    <h1 class="heading">{{text}}</h1>
+    <h1 class="title is-6">{{ value | format }}</h1>
   </div>
 </template>
 
 <script>
 import { preciseSquash } from '@/js/helper'
 export default {
-  props: ['text', 'value'],
+  props: {
+    text: {
+      type: String,
+      default: () => ''
+    },
+    value: {
+      type: Number,
+      default: () => 0
+    },
+    centered: {
+      type: Boolean,
+      default: () => false
+    }
+  },
   filters: {
     format (value) {
       return preciseSquash`${value}`
@@ -22,6 +35,5 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  margin: 1.5rem 0;
 }
 </style>

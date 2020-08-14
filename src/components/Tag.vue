@@ -1,7 +1,7 @@
 <template>
   <b-taglist attached>
-    <b-tag  :type="{ 'is-black': !light, 'is-light': light }">{{value1}}</b-tag>
-    <b-tag :type="{ 'is-success': success, 'is-warning': warning, 'is-danger': danger }">{{value2}}</b-tag>
+    <b-tag  :type="value1Style">{{value1}}</b-tag>
+    <b-tag :type="value2Style">{{value2}}</b-tag>
   </b-taglist>
 </template>
 
@@ -14,6 +14,17 @@ export default {
     warning: Boolean,
     success: Boolean,
     light: Boolean
+  },
+  computed: {
+    value1Style () {
+      if (this.light) return 'is-light'
+      return 'is-black'
+    },
+    value2Style () {
+      if (this.success) return 'is-success'
+      if (this.warning) return 'is-warning'
+      return 'is-danger'
+    }
   }
 }
 </script>

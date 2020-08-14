@@ -5,19 +5,19 @@
       <div slot-scope="{statistics}">
         <Tag success :value1="formatDate(statistics.updated)" :value2="formatTime(statistics.updated)" />
         <div class="statistics-group">
-          <StatisticsCard text="Affected countries" :value="statistics.affectedCountries" />
-          <StatisticsCard text="Tests per million" :value="statistics.testsPerOneMillion" />
-          <StatisticsCard text="Deaths per million" :value="statistics.deathsPerOneMillion" />
+          <StatisticsCard text="Affected countries" :value="statistics.affectedCountries" centered />
+          <StatisticsCard text="Tests per million" :value="statistics.testsPerOneMillion" centered />
+          <StatisticsCard text="Deaths per million" :value="statistics.deathsPerOneMillion" centered />
         </div>
         <div class="statistics-group">
-          <StatisticsCard text="Total Cases" :value="statistics.cases" />
-          <StatisticsCard text="Total Recovered" :value="statistics.recovered" />
-          <StatisticsCard text="Total Deaths" :value="statistics.deaths" />
+          <StatisticsCard text="Total Cases" :value="statistics.cases" centered />
+          <StatisticsCard text="Total Recovered" :value="statistics.recovered" centered />
+          <StatisticsCard text="Total Deaths" :value="statistics.deaths" centered />
         </div>
         <div class="statistics-group">
-          <StatisticsCard text="Today Cases" :value="statistics.todayCases" />
-          <StatisticsCard text="Today Recovered" :value="statistics.todayRecovered" />
-          <StatisticsCard text="Today Deaths" :value="statistics.todayDeaths" />
+          <StatisticsCard text="Today Cases" :value="statistics.todayCases" centered />
+          <StatisticsCard text="Today Recovered" :value="statistics.todayRecovered" centered />
+          <StatisticsCard text="Today Deaths" :value="statistics.todayDeaths" centered />
         </div>
       </div>
     </RenderlessWorldStatistics>
@@ -61,6 +61,7 @@ export default {
 }
 .statistics-group {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-around;
+  margin: 2rem 0;
 }
 </style>

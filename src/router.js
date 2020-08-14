@@ -24,11 +24,6 @@ export default new Router({
       component: () => import('./views/Country.vue')
     },
     {
-      path: '/countryTrend',
-      name: 'countryTrend',
-      component: () => import('./views/CountryTrend.vue')
-    },
-    {
       path: '/about',
       name: 'about',
       component: () => import('./views/About.vue')
