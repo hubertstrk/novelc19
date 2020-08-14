@@ -15,6 +15,9 @@
       <b-navbar-item tag="router-link" :to="{ name: 'countries' }">
         Countries
       </b-navbar-item>
+      <b-navbar-item tag="router-link" :to="{ name: 'countryTrend' }">
+        Trend
+      </b-navbar-item>
     </template>
 
     <template slot="end">

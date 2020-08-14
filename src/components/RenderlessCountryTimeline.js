@@ -29,8 +29,7 @@ export default {
           mean: mean.map(tymap),
           high: mean.map(highmap),
           low: mean.map(lowmap)
-        },
-        recent: dataList.relativ().slice(dataList.dataPoints.length - 10, dataList.dataPoints.length - 0)
+        }
       }
       return acc
     }, {})

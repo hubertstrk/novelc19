@@ -42,6 +42,7 @@ export default new Vuex.Store({
         .then(data => data.data)
         .then((data) => {
           commit('storeCountries', data)
+          return data.map(x => x.country)
         })
     },
     async loadCountryTimeline ({ commit }, country) {
@@ -49,6 +50,15 @@ export default new Vuex.Store({
         .then(data => data.data)
         .then((data) => {
           commit('storeTimeline', { country: data.country, timeline: data.timeline })
+        })
+    },
+    async loadCountryTimelines ({ commit }, countries) {
+      return axios.get(`https://corona.lmao.ninja/v2/historical/${countries}?lastdays=all`)
+        .then(data => data.data)
+        .then((data) => {
+          data.forEach(({ country, timeline }) => {
+            commit('storeTimeline', { country, timeline })
+          })
         })
     }
   }

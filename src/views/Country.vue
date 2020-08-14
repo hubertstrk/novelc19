@@ -43,14 +43,6 @@
         ]" />
       </div>
     </RenderlessCountryTimeline>
-
-    <!-- <RenderlessCountryTimeline :country="this.$route.params.country">
-      <div slot-scope="{timelines}">
-        <div v-for="data in timelines" :key="data.date">
-          {{ data.date }} | {{ data.value }}
-        </div>
-      </div>
-    </RenderlessCountryTimeline> -->
   </div>
 </template>
 
@@ -61,7 +53,6 @@ import { isoToDate, isoToTime, preciseSquash } from '@/js/helper'
 
 import Tag from '@/components/Tag'
 import StatisticsCard from '@/components/StatisticsCard'
-
 import GenericTimelineChart from '@/chart/GenericTimelineChart'
 import RenderlessCountryTimeline from '@/components/RenderlessCountryTimeline'
 import RenderlessCountryStatistics from '@/components/RenderlessCountryStatistics'

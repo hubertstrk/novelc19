@@ -7,7 +7,8 @@ import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 
 import './css/global.css'
-
+import Trend from 'vuetrend'
+Vue.use(Trend)
 Vue.use(Buefy)
 
 Vue.config.productionTip = false

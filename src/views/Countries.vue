@@ -46,11 +46,11 @@
               {{ data.row[`${mode}Deaths`] }}
             </NumericDisplay>
           </b-table-column>
-          <b-table-column field="critical" label="Critical" sortable numeric>
+          <!-- <b-table-column field="critical" label="Critical" sortable numeric>
             <NumericDisplay>
               {{ data.row.critical }}
             </NumericDisplay>
-          </b-table-column>
+          </b-table-column> -->
         </template>
       </b-table>
     </div>
