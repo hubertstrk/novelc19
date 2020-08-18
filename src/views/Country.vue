@@ -10,19 +10,19 @@
         </div>
 
         <div class="info-group statistics">
-          <StatisticsCard text="Total Cases" :value="country.cases" centered />
-          <StatisticsCard text="Total Recovered" :value="country.recovered" centered />
-          <StatisticsCard text="Total Deaths" :value="country.deaths" centered />
+          <StatisticDisplay text="Total Cases" :value="country.cases" centered />
+          <StatisticDisplay text="Total Recovered" :value="country.recovered" centered />
+          <StatisticDisplay text="Total Deaths" :value="country.deaths" centered />
         </div>
         <div class="info-group statistics">
-          <StatisticsCard text="Today Cases" :value="country.todayCases" centered />
-          <StatisticsCard text="Today Recovered" :value="country.todayRecovered" centered />
-          <StatisticsCard text="Today Deaths" :value="country.todayDeaths" centered />
+          <StatisticDisplay text="Today Cases" :value="country.todayCases" centered />
+          <StatisticDisplay text="Today Recovered" :value="country.todayRecovered" centered />
+          <StatisticDisplay text="Today Deaths" :value="country.todayDeaths" centered />
         </div>
         <div class="info-group statistics">
-          <StatisticsCard text="Tests Per Million" :value="country.testsPerOneMillion" centered />
-          <StatisticsCard text="Deaths Per Million" :value="country.deathsPerOneMillion" centered />
-          <StatisticsCard text="One Test Per People" :value="country.oneTestPerPeople" centered />
+          <StatisticDisplay text="Tests Per Million" :value="country.testsPerOneMillion" centered />
+          <StatisticDisplay text="Deaths Per Million" :value="country.deathsPerOneMillion" centered />
+          <StatisticDisplay text="One Test Per People" :value="country.oneTestPerPeople" centered />
         </div>
       </div>
     </RenderlessCountryStatistics>
@@ -52,7 +52,7 @@ import { mapActions } from 'vuex'
 import { isoToDate, isoToTime, preciseSquash } from '@/js/helper'
 
 import Tag from '@/components/Tag'
-import StatisticsCard from '@/components/StatisticsCard'
+import StatisticDisplay from '@/components/StatisticDisplay'
 import GenericTimelineChart from '@/chart/GenericTimelineChart'
 import RenderlessCountryTimeline from '@/components/RenderlessCountryTimeline'
 import RenderlessCountryStatistics from '@/components/RenderlessCountryStatistics'
@@ -61,7 +61,7 @@ export default {
   name: 'country',
   components: {
     Tag,
-    StatisticsCard,
+    StatisticDisplay,
     GenericTimelineChart,
     RenderlessCountryTimeline,
     RenderlessCountryStatistics

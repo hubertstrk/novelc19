@@ -1,29 +1,23 @@
 <template>
-  <div :class="$style.card">
-    <div :class="$style['card-title']">
-      <router-link :to="{ name: 'country', params: {country: title} }">
-        <h6 class="subtitle is-5">{{title}}</h6>
-      </router-link>
-      <div :class="$style.info">
+  <div :class="$style['card-component']">
+    <div :class="$style['card-row']">
+      <div :class="$style['card-title']">
+        <slot name="title" />
+      </div>
+      <div :class="$style['card-info']">
         <slot name="info" />
       </div>
     </div>
-    <div :class="$style['card-subtitle']">
-      <StatisticsCard text="Deaths" :value="deaths" />
-      <StatisticsCard text="Cases" :value="cases" />
-      <StatisticsCard text="Population" :value="population" />
+    <div :class="[$style['card-row'], $style['sub-row']]">
+      <slot name="statistics" />
     </div>
   </div>
 </template>
 
 <script>
 import { preciseSquash } from '@/js/helper'
-import StatisticsCard from '@/components/StatisticsCard'
+
 export default {
-  props: ['title', 'population', 'cases', 'deaths'],
-  components: {
-    StatisticsCard
-  },
   methods: {
     formatNumber (value) {
       return preciseSquash`${value}`
@@ -33,45 +27,29 @@ export default {
 </script>
 
 <style lang="scss" module>
-.card {
+.card-component {
   width: 100%;
   display: flex;
   flex-direction: column;
-  border: 1px solid rgb(235,235,235);
+  border: 1px solid rgb(230,230,230);
   border-radius: 6px;
   margin: 6px 0;
 
-  .card-title {
+  .card-row {
     display: flex;
     align-items: center;
     padding: 5px;
-
-    .title {
-      font-size: 1.3em;
-    }
-
-    >:first-child {
-      display: flex;
-      flex: 1;
-    }
-
-    .info {
-      display: flex;
-      flex: 1;
-      height: 100%;
-
-      > *:not(:last-child) {
-        margin-right: 4px;
-      }
-    }
-
-  }
-
-  .card-subtitle {
-    display: flex;
-    align-items: center;
     justify-content: space-between;
-    padding: 5px;
+
+    .card-title {
+      display: flex;
+      flex: 1;
+    }
+
+    .card-info {
+      display: flex;
+      flex: 2;
+    }
   }
 }
 </style>

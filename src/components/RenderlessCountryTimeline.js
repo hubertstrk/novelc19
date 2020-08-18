@@ -29,7 +29,8 @@ export default {
           mean: mean.map(tymap),
           high: mean.map(highmap),
           low: mean.map(lowmap)
-        }
+        },
+        trend: (mean[mean.length - 1].value - mean[mean.length - 7].value) / 7
       }
       return acc
     }, {})

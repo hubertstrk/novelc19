@@ -1,8 +1,6 @@
 <template>
   <div class="countries-component">
-    <b-loading :is-full-page="isFullPage" :active.sync="isLoading" />
     <h1 class="title">Countries</h1>
-
     <b-field>
       <b-radio-button v-model="mode" type="is-primary"
         native-value="total">
@@ -29,28 +27,34 @@
 
           <RenderlessCountryTimeline :country="country.country">
             <div slot-scope="{timelines}">
-             <CountryCard :title="country.country" :population="country.population" :deaths="country[`${mode}Deaths`]" :cases="country[`${mode}Cases`]">
-               <template #info>
-                 <trend
-                    :data="timelines.cases.relative.mean.map(x => x.y)"
-                    :gradient="['#3a86ff', '#3a86ff', '#b8f2e6']"
-                    :padding="spark.padding"
-                    :radius="spark.radius"
-                    :stroke-width="spark.width"
-                    :stroke-linecap="spark.butt"
-                    auto-draw
-                    smooth
-                  />
-                  <trend
+             <CountryCard>
+                <template #title>
+                  <router-link :to="{ name: 'country', params: {country: country.country} }">
+                    <h4 class="subtitle is-5">{{country.country}}</h4>
+                  </router-link>
+               </template>
+               <div slot="info" class="trend-lines">
+                  <TrendLine
                     :data="timelines.deaths.relative.mean.map(x => x.y)"
-                    :gradient="['#f94144', '#f94144', '#ffbe88']"
-                    :padding="spark.padding"
-                    :radius="spark.radius"
-                    :stroke-width="spark.width"
-                    :stroke-linecap="spark.linecap"
-                    auto-draw
-                    smooth
+                   :gradient="['#f94144', '#f94144', '#ffbe88']"
                   />
+                  <TrendLine
+                    :data="timelines.cases.relative.mean.map(x => x.y)"
+                   :gradient="['#3a86ff', '#3a86ff', '#b8f2e6']"
+                  />
+                  <TrendLine
+                    :data="timelines.recovered.relative.mean.map(x => x.y)"
+                   :gradient="['#15b368', '#60e0a3', '#baffde']"
+                  />
+               </div>
+               <template #statistics>
+                  <StatisticDisplay text="Deaths" :value="country[`${mode}Deaths`]">
+                    <TrendIcon :value="timelines.cases.trend" />
+                  </StatisticDisplay>
+                  <StatisticDisplay text="Cases" :value="country[`${mode}Cases`]">
+                    <TrendIcon :value="timelines.deaths.trend" />
+                  </StatisticDisplay>
+                  <StatisticDisplay text="Population" :value="country.population" />
                </template>
              </CountryCard>
             </div>
@@ -66,26 +70,20 @@
 import { mapState, mapMutations, mapActions } from 'vuex'
 import { preciseSquash, capitalize } from '@/js/helper'
 
+import TrendLine from '@/components/TrendLine'
+import TrendIcon from '@/components/TrendIcon'
 import CountryCard from '@/components/CountryCard'
+import StatisticDisplay from '@/components/StatisticDisplay'
 import RenderlessCountriesStatistics from '@/components/RenderlessCountriesStatistics'
 import RenderlessCountryTimeline from '@/components/RenderlessCountryTimeline'
 
 export default {
   name: 'countries',
-  data () {
-    return {
-      spark: {
-        padding: 3,
-        radius: 12,
-        width: 6,
-        linecap: 'butt'
-      },
-      isFullPage: true,
-      isLoading: false
-    }
-  },
   components: {
+    TrendLine,
+    TrendIcon,
     CountryCard,
+    StatisticDisplay,
     RenderlessCountriesStatistics,
     RenderlessCountryTimeline
   },
@@ -114,10 +112,8 @@ export default {
     }
   },
   async created () {
-    this.isLoading = true
     const countries = await this.loadCountries()
-    await this.loadCountryTimelines(countries.slice(0, 50))
-    this.isLoading = false
+    await this.loadCountryTimelines(countries.slice(0, 100))
   }
 }
 </script>
@@ -127,5 +123,16 @@ export default {
   display: flex;
   flex-direction: column;
   flex: 1;
+
+  .trend-lines {
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    height: 100%;
+
+    > * {
+      margin-right: 4px;
+    }
+  }
 }
 </style>
