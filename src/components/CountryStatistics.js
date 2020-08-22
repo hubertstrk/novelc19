@@ -1,19 +1,30 @@
 import { mapState } from 'vuex'
+
 import { SlidingWindow } from '@/js/SlidingWindow'
 import { DataList } from '@/js/DataList'
 
 export default {
   props: {
-    country: null
+    renderTimeline: {
+      type: Boolean,
+      required: false,
+      default: () => false
+    },
+    country: {
+      type: String,
+      required: false,
+      default: null
+    }
   },
   render () {
-    if (!this.timeline || !this.timeline[this.country]) return
-    const raw = this.timeline[this.country]
+    const countryStatistics = this.countries[this.country]
 
-    const dvmap = (type) => (x) => ({ date: x, value: raw[type][x] })
+    const raw = this.timelines[this.country]
+
     const tymap = item => ({ t: item.date, y: item.value })
     const highmap = item => ({ t: item.date, y: item.high })
     const lowmap = item => ({ t: item.date, y: item.low })
+    const dvmap = (type) => (x) => ({ date: x, value: raw[type][x] })
 
     const timelines = ['cases', 'deaths', 'recovered'].reduce((acc, type) => {
       const dataPoints = Object.keys(raw[type]).map(dvmap(type))
@@ -22,10 +33,10 @@ export default {
 
       acc[type] = {
         absolute: {
-          timeline: dataList.absolute().map(tymap)
+          raw: dataList.absolute().map(tymap)
         },
         relative: {
-          timeline: dataList.relativ().map(tymap),
+          raw: dataList.relativ().map(tymap),
           mean: mean.map(tymap),
           high: mean.map(highmap),
           low: mean.map(lowmap)
@@ -35,13 +46,24 @@ export default {
       return acc
     }, {})
 
+    const statistics = {
+      ...countryStatistics,
+      timelines: timelines,
+      totalActive: countryStatistics.active,
+      totalCases: countryStatistics.cases,
+      totalDeaths: countryStatistics.deaths,
+      totalRecovered: countryStatistics.recovered
+    }
+
     return this.$scopedSlots.default({
-      timelines: timelines
+      statistics: statistics
     })
   },
   computed: {
     ...mapState({
-      timeline: state => state.timeline
+      countries: state => state.countries,
+      timelines: state => state.timelines,
+      searchText: state => state.searchText
     })
   }
 }

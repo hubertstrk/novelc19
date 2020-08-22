@@ -18,7 +18,7 @@ export default {
       spark: {
         padding: 3,
         radius: 12,
-        width: 6,
+        width: 2,
         linecap: 'butt'
       }
     }
@@ -27,6 +27,5 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-
+<style lang="scss" module>
 </style>

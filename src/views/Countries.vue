@@ -21,48 +21,47 @@
       </b-input>
     </section>
 
-    <RenderlessCountriesStatistics>
-      <div slot-scope="{countries}">
-        <div v-for="(country, index) in countries" :key="index">
+    <div v-if="Object.keys(timelines).length > 0">
+      <template v-for="iso3 in Object.keys(timelines)">
+        <CountryStatistics render-timeline :country="iso3" :key="iso3">
+          <div slot-scope="{statistics}">
 
-          <RenderlessCountryTimeline :country="country.country">
-            <div slot-scope="{timelines}">
-             <CountryCard>
-                <template #title>
-                  <router-link :to="{ name: 'country', params: {country: country.country} }">
-                    <h4 class="subtitle is-5">{{country.country}}</h4>
-                  </router-link>
-               </template>
-               <div slot="info" class="trend-lines">
-                  <TrendLine
-                    :data="timelines.deaths.relative.mean.map(x => x.y)"
-                   :gradient="['#f94144', '#f94144', '#ffbe88']"
-                  />
-                  <TrendLine
-                    :data="timelines.cases.relative.mean.map(x => x.y)"
-                   :gradient="['#3a86ff', '#3a86ff', '#b8f2e6']"
-                  />
-                  <TrendLine
-                    :data="timelines.recovered.relative.mean.map(x => x.y)"
-                   :gradient="['#15b368', '#60e0a3', '#baffde']"
-                  />
-               </div>
-               <template #statistics>
-                  <StatisticDisplay text="Deaths" :value="country[`${mode}Deaths`]">
-                    <TrendIcon :value="timelines.cases.trend" />
-                  </StatisticDisplay>
-                  <StatisticDisplay text="Cases" :value="country[`${mode}Cases`]">
-                    <TrendIcon :value="timelines.deaths.trend" />
-                  </StatisticDisplay>
-                  <StatisticDisplay text="Population" :value="country.population" />
-               </template>
-             </CountryCard>
-            </div>
-          </RenderlessCountryTimeline>
+            <CountryCard>
+              <template #title>
+                <router-link :to="{ name: 'country', params: {country: statistics.countryInfo.iso3} }">
+                  <h4 class="subtitle is-5">{{statistics.country}}</h4>
+                </router-link>
+              </template>
 
-        </div>
-      </div>
-    </RenderlessCountriesStatistics>
+              <div slot="info" class="trend-lines">
+                <TrendLine
+                  :data="statistics.timelines.deaths.relative.mean.map(x => x.y)"
+                  :gradient="['#f94144', '#f94144', '#ffbe88']"
+                />
+                <TrendLine
+                  :data="statistics.timelines.cases.relative.mean.map(x => x.y)"
+                  :gradient="['#3a86ff', '#3a86ff', '#b8f2e6']"
+                />
+                <TrendLine
+                  :data="statistics.timelines.recovered.relative.mean.map(x => x.y)"
+                  :gradient="['#15b368', '#60e0a3', '#baffde']"
+                />
+              </div>
+              <template #statistics>
+                <StatisticDisplay text="Cases" :value="statistics[`${mode}Cases`]">
+                  <TrendIcon :value="statistics.timelines.cases.trend" />
+                </StatisticDisplay>
+                <StatisticDisplay text="Deaths" :value="statistics[`${mode}Deaths`]">
+                  <TrendIcon :value="statistics.timelines.deaths.trend" />
+                </StatisticDisplay>
+                <StatisticDisplay text="Population" :value="statistics.population" />
+              </template>
+            </CountryCard>
+
+          </div>
+        </CountryStatistics>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -74,8 +73,7 @@ import TrendLine from '@/components/TrendLine'
 import TrendIcon from '@/components/TrendIcon'
 import CountryCard from '@/components/CountryCard'
 import StatisticDisplay from '@/components/StatisticDisplay'
-import RenderlessCountriesStatistics from '@/components/RenderlessCountriesStatistics'
-import RenderlessCountryTimeline from '@/components/RenderlessCountryTimeline'
+import CountryStatistics from '@/components/CountryStatistics'
 
 export default {
   name: 'countries',
@@ -84,13 +82,14 @@ export default {
     TrendIcon,
     CountryCard,
     StatisticDisplay,
-    RenderlessCountriesStatistics,
-    RenderlessCountryTimeline
+    CountryStatistics
   },
   computed: {
     ...mapState({
       searchText: state => state.search,
-      modeSelection: state => state.modeSelection
+      modeSelection: state => state.modeSelection,
+      countries: state => state.countries,
+      timelines: state => state.timelines
     }),
     search: {
       get () { return this.searchText },
@@ -102,8 +101,13 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['loadCountries', 'loadCountryTimelines']),
-    ...mapMutations(['setSearch', 'setModeSelection']),
+    ...mapActions([
+      'loadAllCountryStatistics'
+    ]),
+    ...mapMutations([
+      'setSearch',
+      'setModeSelection'
+    ]),
     formatNumber (value) {
       return preciseSquash`${value}`
     },
@@ -112,8 +116,7 @@ export default {
     }
   },
   async created () {
-    const countries = await this.loadCountries()
-    await this.loadCountryTimelines(countries.slice(0, 100))
+    this.loadAllCountryStatistics()
   }
 }
 </script>

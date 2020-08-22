@@ -1,61 +1,56 @@
 <template>
-  <div class="country-component">
-    <RenderlessCountryStatistics :country="this.$route.params.country">
-      <div slot-scope="{country}">
-        <h1 class="title is-1">{{country.country}}</h1>
+  <div v-if="Object.keys(timelines).length > 0" class="country-component">
+    <CountryStatistics :country="this.$route.params.country" render-timeline>
+      <div slot-scope="{statistics}">
+        <h1 class="title is-1">{{statistics.country}}</h1>
 
         <div class="info-group">
-          <Tag success :value1="formatDate(country.updated)" :value2="formatTime(country.updated)" />
-          <Tag danger value1="Population" :value2="formatNumber(country.population)" />
+          <Tag success :value1="formatDate(statistics.updated)" :value2="formatTime(statistics.updated)" />
+          <Tag danger value1="Population" :value2="formatNumber(statistics.population)" />
         </div>
 
         <div class="info-group statistics">
-          <StatisticDisplay text="Total Cases" :value="country.cases" centered />
-          <StatisticDisplay text="Total Recovered" :value="country.recovered" centered />
-          <StatisticDisplay text="Total Deaths" :value="country.deaths" centered />
+          <StatisticDisplay text="Total Cases" :value="statistics.cases" centered />
+          <StatisticDisplay text="Total Recovered" :value="statistics.recovered" centered />
+          <StatisticDisplay text="Total Deaths" :value="statistics.deaths" centered />
         </div>
         <div class="info-group statistics">
-          <StatisticDisplay text="Today Cases" :value="country.todayCases" centered />
-          <StatisticDisplay text="Today Recovered" :value="country.todayRecovered" centered />
-          <StatisticDisplay text="Today Deaths" :value="country.todayDeaths" centered />
+          <StatisticDisplay text="Today Cases" :value="statistics.todayCases" centered />
+          <StatisticDisplay text="Today Recovered" :value="statistics.todayRecovered" centered />
+          <StatisticDisplay text="Today Deaths" :value="statistics.todayDeaths" centered />
         </div>
         <div class="info-group statistics">
-          <StatisticDisplay text="Tests Per Million" :value="country.testsPerOneMillion" centered />
-          <StatisticDisplay text="Deaths Per Million" :value="country.deathsPerOneMillion" centered />
-          <StatisticDisplay text="One Test Per People" :value="country.oneTestPerPeople" centered />
+          <StatisticDisplay text="Tests Per Million" :value="statistics.testsPerOneMillion" centered />
+          <StatisticDisplay text="Deaths Per Million" :value="statistics.deathsPerOneMillion" centered />
+          <StatisticDisplay text="One Test Per People" :value="statistics.oneTestPerPeople" centered />
         </div>
-      </div>
-    </RenderlessCountryStatistics>
 
-    <RenderlessCountryTimeline :country="this.$route.params.country">
-      <div slot-scope="{timelines}">
         <GenericTimelineChart :timelines="[
-          { label: 'Deaths', data: timelines.deaths.relative.timeline, order: 2 },
-          { label: 'Mean', data: timelines.deaths.relative.mean, type: 'line', borderColor: 'red', pointRadius: 0, fill: false, order: 1 }
+          { label: 'Deaths', data: statistics.timelines.deaths.relative.raw, order: 2 },
+          { label: 'Mean', data: statistics.timelines.deaths.relative.mean, type: 'line', borderColor: 'red', pointRadius: 0, fill: false, order: 1 }
         ]" />
         <GenericTimelineChart :timelines="[
-          { label: 'Cases', data: timelines.cases.relative.timeline, order: 2 },
-          { label: 'Mean', data: timelines.cases.relative.mean, type: 'line', borderColor: 'blue', pointRadius: 0, fill: false, order: 1 }
+          { label: 'Cases', data: statistics.timelines.cases.relative.raw, order: 2 },
+          { label: 'Mean', data: statistics.timelines.cases.relative.mean, type: 'line', borderColor: 'blue', pointRadius: 0, fill: false, order: 1 }
         ]" />
         <GenericTimelineChart :timelines="[
-          { label: 'Recovered', data: timelines.recovered.relative.timeline, order: 2 },
-          { label: 'Mean', data: timelines.recovered.relative.mean, type: 'line', borderColor: 'green', pointRadius: 0, fill: false, order: 1 }
+          { label: 'Recovered', data: statistics.timelines.recovered.relative.raw, order: 2 },
+          { label: 'Mean', data: statistics.timelines.recovered.relative.mean, type: 'line', borderColor: 'green', pointRadius: 0, fill: false, order: 1 }
         ]" />
       </div>
-    </RenderlessCountryTimeline>
+    </CountryStatistics>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 import { isoToDate, isoToTime, preciseSquash } from '@/js/helper'
 
 import Tag from '@/components/Tag'
 import StatisticDisplay from '@/components/StatisticDisplay'
 import GenericTimelineChart from '@/chart/GenericTimelineChart'
-import RenderlessCountryTimeline from '@/components/RenderlessCountryTimeline'
-import RenderlessCountryStatistics from '@/components/RenderlessCountryStatistics'
+import CountryStatistics from '@/components/CountryStatistics'
 
 export default {
   name: 'country',
@@ -63,13 +58,17 @@ export default {
     Tag,
     StatisticDisplay,
     GenericTimelineChart,
-    RenderlessCountryTimeline,
-    RenderlessCountryStatistics
+    CountryStatistics
+  },
+  computed: {
+    ...mapState({
+      countries: state => state.countries,
+      timelines: state => state.timelines
+    })
   },
   methods: {
     ...mapActions([
-      'loadCountryTimeline',
-      'loadCountries'
+      'loadSingleCountryStatistics'
     ]),
     formatDate (value) {
       return `${isoToDate(value)}`
@@ -82,12 +81,10 @@ export default {
     }
   },
   async mounted () {
-    await this.loadCountryTimeline(this.$route.params.country)
-    await this.loadCountries()
+    this.loadSingleCountryStatistics(this.$route.params.country)
   },
   beforeRouteUpdate (to, from, next) {
-    this.loadCountryTimeline(to.country)
-    this.loadCountries()
+    this.loadSingleCountryStatistics(this.$route.params.country)
   }
 }
 </script>
