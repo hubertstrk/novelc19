@@ -10,33 +10,42 @@ export default {
       required: false,
       default: () => false
     },
-    country: {
+    iso3: {
       type: String,
       required: false,
       default: null
     }
   },
   render () {
-    const countryStatistics = this.countries[this.country]
+    if (!this.countries || !this.timelines) return
+    const statistics = {}
+    const countryStatistics = this.countries[this.iso3]
+    Object.assign(statistics, countryStatistics)
+    Object.assign(statistics, {
+      totalActive: countryStatistics.active,
+      totalCases: countryStatistics.cases,
+      totalDeaths: countryStatistics.deaths,
+      totalRecovered: countryStatistics.recovered
+    })
 
-    const raw = this.timelines[this.country]
+    const timeline = this.timelines[this.iso3]
 
     const tymap = item => ({ t: item.date, y: item.value })
     const highmap = item => ({ t: item.date, y: item.high })
     const lowmap = item => ({ t: item.date, y: item.low })
-    const dvmap = (type) => (x) => ({ date: x, value: raw[type][x] })
+    const dvmap = (type) => (x) => ({ date: x, value: timeline[type][x] })
 
     const timelines = ['cases', 'deaths', 'recovered'].reduce((acc, type) => {
-      const dataPoints = Object.keys(raw[type]).map(dvmap(type))
+      const dataPoints = Object.keys(timeline[type]).map(dvmap(type))
       const dataList = new DataList(dataPoints)
       const mean = new SlidingWindow(dataList.relativ(), 7).mean()
 
       acc[type] = {
         absolute: {
-          raw: dataList.absolute().map(tymap)
+          timeline: dataList.absolute().map(tymap)
         },
         relative: {
-          raw: dataList.relativ().map(tymap),
+          timeline: dataList.relativ().map(tymap),
           mean: mean.map(tymap),
           high: mean.map(highmap),
           low: mean.map(lowmap)
@@ -45,15 +54,17 @@ export default {
       }
       return acc
     }, {})
+    statistics.timelines = timelines
 
-    const statistics = {
-      ...countryStatistics,
-      timelines: timelines,
-      totalActive: countryStatistics.active,
-      totalCases: countryStatistics.cases,
-      totalDeaths: countryStatistics.deaths,
-      totalRecovered: countryStatistics.recovered
-    }
+    const yesterday = ['cases', 'deaths', 'recovered'].map((x) => {
+      const values = Object.values(timeline[x])
+      return values[values.length - 2] - values[values.length - 3]
+    })
+    Object.assign(statistics, {
+      yesterdayCases: yesterday[0],
+      yesterdayDeaths: yesterday[1],
+      yesterdayRecovered: yesterday[2]
+    })
 
     return this.$scopedSlots.default({
       statistics: statistics

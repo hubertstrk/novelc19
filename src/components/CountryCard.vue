@@ -4,12 +4,29 @@
       <div :class="$style['card-title']">
         <slot name="title" />
       </div>
-      <div :class="$style['card-info']">
-        <slot name="info" />
+      <div :class="$style['spark-lines']">
+        <TrendLine
+          :data="statistics.timelines.deaths.relative.mean.map(x => x.y)"
+          :gradient="['#f94144', '#f94144', '#ffbe88']"
+        />
+        <TrendLine
+          :data="statistics.timelines.cases.relative.mean.map(x => x.y)"
+          :gradient="['#3a86ff', '#3a86ff', '#b8f2e6']"
+        />
+        <TrendLine
+          :data="statistics.timelines.recovered.relative.mean.map(x => x.y)"
+          :gradient="['#15b368', '#60e0a3', '#baffde']"
+        />
       </div>
     </div>
     <div :class="[$style['card-row'], $style['sub-row']]">
-      <slot name="statistics" />
+      <StatisticDisplay small text="Cases" :value="statistics[`${mode}Cases`]">
+        <TrendIcon :value="statistics.timelines.cases.trend" />
+      </StatisticDisplay>
+      <StatisticDisplay small text="Deaths" :value="statistics[`${mode}Deaths`]">
+        <TrendIcon :value="statistics.timelines.deaths.trend" />
+      </StatisticDisplay>
+      <StatisticDisplay small text="Population" :value="statistics.population" />
     </div>
   </div>
 </template>
@@ -17,7 +34,26 @@
 <script>
 import { preciseSquash } from '@/js/helper'
 
+import TrendLine from '@/components/TrendLine'
+import TrendIcon from '@/components/TrendIcon'
+import StatisticDisplay from '@/components/StatisticDisplay'
+
 export default {
+  props: {
+    statistics: {
+      type: Object,
+      required: true
+    },
+    mode: {
+      type: String,
+      required: true
+    }
+  },
+  components: {
+    TrendLine,
+    TrendIcon,
+    StatisticDisplay
+  },
   methods: {
     formatNumber (value) {
       return preciseSquash`${value}`
@@ -28,17 +64,16 @@ export default {
 
 <style lang="scss" module>
 .card-component {
-  width: 100%;
   display: flex;
   flex-direction: column;
   border: 1px solid rgb(230,230,230);
   border-radius: 6px;
-  margin: 6px 0;
+  margin: 3px 0;
 
   .card-row {
     display: flex;
     align-items: center;
-    padding: 5px;
+    padding: 6px;
     justify-content: space-between;
 
     .card-title {
@@ -46,9 +81,10 @@ export default {
       flex: 1;
     }
 
-    .card-info {
+    .spark-lines {
       display: flex;
       flex: 2;
+      justify-content: space-between;
     }
   }
 }

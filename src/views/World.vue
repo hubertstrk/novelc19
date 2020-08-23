@@ -40,7 +40,7 @@ export default {
     RenderlessWorldStatistics
   },
   methods: {
-    ...mapActions(['loadWorld']),
+    ...mapActions(['loadWorldStatistics']),
     formatDate (value) {
       return `${isoToDate(value)}`
     },
@@ -49,7 +49,7 @@ export default {
     }
   },
   created () {
-    this.loadWorld()
+    this.loadWorldStatistics()
   }
 }
 </script>

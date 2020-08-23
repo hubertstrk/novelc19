@@ -6,10 +6,13 @@
         native-value="total">
         <span>Total</span>
       </b-radio-button>
-
       <b-radio-button v-model="mode" type="is-primary"
         native-value="today">
         <span>Today</span>
+      </b-radio-button>
+      <b-radio-button v-model="mode" type="is-primary"
+        native-value="yesterday">
+        <span>Yesterday</span>
       </b-radio-button>
     </b-field>
 
@@ -20,41 +23,16 @@
         v-model="search">
       </b-input>
     </section>
-
-    <div v-if="Object.keys(timelines).length > 0">
-      <template v-for="iso3 in Object.keys(timelines)">
-        <CountryStatistics render-timeline :country="iso3" :key="iso3">
+    <div>
+      <template v-for="(iso3, index) in Object.keys(timelines)">
+        <CountryStatistics :iso3="iso3" :key="index">
           <div slot-scope="{statistics}">
 
-            <CountryCard>
+            <CountryCard :statistics="statistics" :mode="mode">
               <template #title>
                 <router-link :to="{ name: 'country', params: {country: statistics.countryInfo.iso3} }">
                   <h4 class="subtitle is-5">{{statistics.country}}</h4>
                 </router-link>
-              </template>
-
-              <div slot="info" class="trend-lines">
-                <TrendLine
-                  :data="statistics.timelines.deaths.relative.mean.map(x => x.y)"
-                  :gradient="['#f94144', '#f94144', '#ffbe88']"
-                />
-                <TrendLine
-                  :data="statistics.timelines.cases.relative.mean.map(x => x.y)"
-                  :gradient="['#3a86ff', '#3a86ff', '#b8f2e6']"
-                />
-                <TrendLine
-                  :data="statistics.timelines.recovered.relative.mean.map(x => x.y)"
-                  :gradient="['#15b368', '#60e0a3', '#baffde']"
-                />
-              </div>
-              <template #statistics>
-                <StatisticDisplay text="Cases" :value="statistics[`${mode}Cases`]">
-                  <TrendIcon :value="statistics.timelines.cases.trend" />
-                </StatisticDisplay>
-                <StatisticDisplay text="Deaths" :value="statistics[`${mode}Deaths`]">
-                  <TrendIcon :value="statistics.timelines.deaths.trend" />
-                </StatisticDisplay>
-                <StatisticDisplay text="Population" :value="statistics.population" />
               </template>
             </CountryCard>
 
@@ -62,6 +40,7 @@
         </CountryStatistics>
       </template>
     </div>
+     <b-loading :is-full-page="false" :active.sync="isLoading" />
   </div>
 </template>
 
@@ -69,20 +48,19 @@
 import { mapState, mapMutations, mapActions } from 'vuex'
 import { preciseSquash, capitalize } from '@/js/helper'
 
-import TrendLine from '@/components/TrendLine'
-import TrendIcon from '@/components/TrendIcon'
 import CountryCard from '@/components/CountryCard'
-import StatisticDisplay from '@/components/StatisticDisplay'
 import CountryStatistics from '@/components/CountryStatistics'
 
 export default {
   name: 'countries',
   components: {
-    TrendLine,
-    TrendIcon,
     CountryCard,
-    StatisticDisplay,
     CountryStatistics
+  },
+  data () {
+    return {
+      isLoading: false
+    }
   },
   computed: {
     ...mapState({
@@ -115,8 +93,15 @@ export default {
       return capitalize(value)
     }
   },
-  async created () {
-    this.loadAllCountryStatistics()
+  async mounted () {
+    this.isLoading = true
+    try {
+      await this.loadAllCountryStatistics()
+    } catch (error) {
+      console.info(error)
+    } finally {
+      this.isLoading = false
+    }
   }
 }
 </script>
@@ -126,16 +111,5 @@ export default {
   display: flex;
   flex-direction: column;
   flex: 1;
-
-  .trend-lines {
-    display: flex;
-    flex: 1;
-    justify-content: space-between;
-    height: 100%;
-
-    > * {
-      margin-right: 4px;
-    }
-  }
 }
 </style>

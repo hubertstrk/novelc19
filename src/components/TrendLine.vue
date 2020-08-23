@@ -18,7 +18,7 @@ export default {
       spark: {
         padding: 3,
         radius: 12,
-        width: 2,
+        width: 3,
         linecap: 'butt'
       }
     }

@@ -4,7 +4,7 @@
       <h1 class="heading">{{text}}</h1>
       <slot />
     </div>
-    <h1 class="title is-6">{{ value | format }}</h1>
+    <h1 class="title" :class="[ small ? 'is-7' : 'is-5' ]">{{ value | format }}</h1>
   </div>
 </template>
 
@@ -22,6 +22,11 @@ export default {
     },
     centered: {
       type: Boolean,
+      default: () => false
+    },
+    small: {
+      type: Boolean,
+      required: false,
       default: () => false
     }
   },

@@ -37,22 +37,22 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    async loadWorld ({ commit }) {
+    async loadWorldStatistics ({ commit }) {
       return axios.get('https://corona.lmao.ninja/v2/all')
         .then(data => data.data)
         .then((data) => {
           commit('storeWorld', data)
         })
     },
-    async loadSingleCountryStatistics ({ commit }, iso3) {
+    async loadStatisticsByCountry ({ commit }, iso3) {
       // statistics
-      axios.get(`https://corona.lmao.ninja/v2/countries/${iso3}`)
+      await axios.get(`https://corona.lmao.ninja/v2/countries/${iso3}`)
         .then(data => data.data)
         .then((data) => {
           commit('storeCountryStatistics', { iso3, statistics: data })
         })
       // timeline
-      axios.get(`https://corona.lmao.ninja/v2/historical/${iso3}?lastdays=all`)
+      await axios.get(`https://corona.lmao.ninja/v2/historical/${iso3}?lastdays=all`)
         .then(data => data.data)
         .then((data) => {
           commit('storeCountryTimeline', { iso3, timeline: data.timeline })
@@ -67,7 +67,7 @@ export default new Vuex.Store({
           commit('storeAllCountryStatistics', lookup)
         })
       // timeline
-      axios.get(`https://corona.lmao.ninja/v2/historical/${Object.keys(state.countries)}?lastdays=all`)
+      await axios.get(`https://corona.lmao.ninja/v2/historical/${Object.keys(state.countries)}?lastdays=all`)
         .then(data => data.data)
         .then((data) => {
           const timelinesWithHistoricalData = data.filter(x => !x.hasOwnProperty('message'))
