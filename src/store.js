@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import { keyBy } from 'lodash'
+import { slice } from 'core-js/fn/array'
 
 Vue.use(Vuex)
 
@@ -46,17 +47,19 @@ export default new Vuex.Store({
     },
     async loadStatisticsByCountry ({ commit }, iso3) {
       // statistics
-      await axios.get(`https://corona.lmao.ninja/v2/countries/${iso3}`)
+      const stats = axios.get(`https://corona.lmao.ninja/v2/countries/${iso3}`)
         .then(data => data.data)
         .then((data) => {
           commit('storeCountryStatistics', { iso3, statistics: data })
         })
       // timeline
-      await axios.get(`https://corona.lmao.ninja/v2/historical/${iso3}?lastdays=all`)
+      const timeline = axios.get(`https://corona.lmao.ninja/v2/historical/${iso3}?lastdays=all`)
         .then(data => data.data)
         .then((data) => {
           commit('storeCountryTimeline', { iso3, timeline: data.timeline })
         })
+
+      return Promise.all([stats, timeline])
     },
     async loadAllCountryStatistics ({ state, commit }) {
       // statistics
@@ -67,7 +70,7 @@ export default new Vuex.Store({
           commit('storeAllCountryStatistics', lookup)
         })
       // timeline
-      await axios.get(`https://corona.lmao.ninja/v2/historical/${Object.keys(state.countries)}?lastdays=all`)
+      return axios.get(`https://corona.lmao.ninja/v2/historical/${Object.keys(state.countries).slice(0, 100)}?lastdays=all`)
         .then(data => data.data)
         .then((data) => {
           const timelinesWithHistoricalData = data.filter(x => !x.hasOwnProperty('message'))

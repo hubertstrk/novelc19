@@ -86,10 +86,10 @@ export default {
     }
   },
   async mounted () {
-    this.loadStatisticsByCountry(this.$route.params.country)
+    await this.loadStatisticsByCountry(this.$route.params.country)
   },
-  beforeRouteUpdate (to, from, next) {
-    this.loadStatisticsByCountry(this.$route.params.country)
+  async beforeRouteUpdate (to, from, next) {
+    await this.loadStatisticsByCountry(this.$route.params.country)
   }
 }
 </script>

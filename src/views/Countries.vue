@@ -24,16 +24,14 @@
       </b-input>
     </section>
     <div>
-      <template v-for="(iso3, index) in Object.keys(timelines)">
+      <template v-for="(iso3, index) in Object.keys(countries)">
         <CountryStatistics :iso3="iso3" :key="index">
           <div slot-scope="{statistics}">
 
             <CountryCard :statistics="statistics" :mode="mode">
-              <template #title>
-                <router-link :to="{ name: 'country', params: {country: statistics.countryInfo.iso3} }">
-                  <h4 class="subtitle is-5">{{statistics.country}}</h4>
-                </router-link>
-              </template>
+              <router-link :to="{ name: 'country', params: {country: statistics.countryInfo.iso3} }">
+                <h4 class="subtitle is-5">{{statistics.country}}</h4>
+              </router-link>
             </CountryCard>
 
           </div>
@@ -94,14 +92,7 @@ export default {
     }
   },
   async mounted () {
-    this.isLoading = true
-    try {
-      await this.loadAllCountryStatistics()
-    } catch (error) {
-      console.info(error)
-    } finally {
-      this.isLoading = false
-    }
+    await this.loadAllCountryStatistics()
   }
 }
 </script>
