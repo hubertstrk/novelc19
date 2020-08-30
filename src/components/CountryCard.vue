@@ -20,7 +20,7 @@
           />
         </template>
         <div :class="$style['card-info']" v-else>
-          <b-tag type="is-warning is-light">country doesn't provide any timeline data</b-tag>
+          <b-tag type="is-warning is-light">country doesn't provide any timeseries</b-tag>
         </div>
       </div>
     </div>
@@ -44,6 +44,10 @@ import TrendIcon from '@/components/TrendIcon'
 import StatisticDisplay from '@/components/StatisticDisplay'
 
 export default {
+  data () {
+    return {
+    }
+  },
   props: {
     statistics: {
       type: Object,

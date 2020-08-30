@@ -29,9 +29,10 @@
           <div slot-scope="{statistics}">
 
             <CountryCard :statistics="statistics" :mode="mode">
-              <router-link :to="{ name: 'country', params: {country: statistics.countryInfo.iso3} }">
+              <router-link v-if="statistics.countryInfo.iso3" :to="{ name: 'country', params: {country: statistics.countryInfo.iso3} }">
                 <h4 class="subtitle is-5">{{statistics.country}}</h4>
               </router-link>
+              <b-tag v-else type="is-danger is-light">undefined</b-tag>
             </CountryCard>
 
           </div>

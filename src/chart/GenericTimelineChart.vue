@@ -17,7 +17,7 @@ export default {
   data () {
     return {
       chart: null,
-      options: {
+      defaultOptions: {
         legend: {
           display: true
         },
@@ -33,7 +33,7 @@ export default {
           animationDuration: 0
         },
         responsiveAnimationDuration: 0,
-        aspectRatio: 2,
+        aspectRatio: 1,
         responsive: true,
         scales: {
           xAxes: [{
@@ -61,7 +61,7 @@ export default {
       var chart = new Chart(this.$refs.chart, {
         type: 'bar',
         data: { datasets: this.timelines },
-        options: Object.assign({}, this.options)
+        options: Object.assign({}, this.defaultOptions)
       })
       this.chart = chart
     },
