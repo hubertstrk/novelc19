@@ -1,4 +1,4 @@
-import { sortBy, times, sum, meanBy, minBy, maxBy } from 'lodash'
+import { sortBy, sum, meanBy, minBy, maxBy, range } from 'lodash'
 
 export class SlidingWindow {
   /**
@@ -18,8 +18,12 @@ export class SlidingWindow {
    * Generates the windows based on the window size.
    */
   windows () {
-    const range = times(this.dataPoints.length - this.size, Number)
-    return range.map(item => this.dataPoints.slice(item, item + this.size))
+    // const range = times(this.dataPoints.length - this.size, Number)
+    // return range.map(item => this.dataPoints.slice(item, item + this.size))
+
+    const stopAt = this.dataPoints.length - (this.dataPoints.length % this.size)
+    const wins = range(0, stopAt, this.size)
+    return wins.map(item => this.dataPoints.slice(item, item + this.size))
   }
 
   /**

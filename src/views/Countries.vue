@@ -25,7 +25,7 @@
     </section>
     <div>
       <template v-for="(iso3, index) in Object.keys(countries)">
-        <CountryStatistics :iso3="iso3" :key="index">
+        <CountryStatistics :iso3="iso3" :key="index" coarse>
           <div slot-scope="{statistics}">
 
             <CountryCard :statistics="statistics" :mode="mode">
