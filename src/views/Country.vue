@@ -33,20 +33,20 @@
         <GenericTimelineChart :timelines="[
           { label: 'Deaths', data: statistics.timelines.deaths.relative.timeline, borderWidth: 2},
           { label: 'Mean', data: statistics.timelines.deaths.relative.mean, type: 'line', borderColor: 'red', pointRadius: 0, fill: false, borderWidth: 2},
-          { label: 'High', pointRadius: 0, fill: '+1', data: statistics.timelines.deaths.relative.high, type: 'line', borderColor: 'rgba(245, 66, 66, 0.2)', backgroundColor: 'rgba(245, 66, 66, 0.2)'},
-          { label: 'Low', pointRadius: 0, fill: false, data: statistics.timelines.deaths.relative.low, type: 'line', borderColor: 'rgba(245, 66, 66, 0.2)', backgroundColor: 'rgba(245, 66, 66, 0.2)'}
+          { hidden: true, label: 'High', pointRadius: 0, fill: '+1', data: statistics.timelines.deaths.relative.high, type: 'line', borderColor: 'rgba(245, 66, 66, 0.2)', backgroundColor: 'rgba(245, 66, 66, 0.2)'},
+          { hidden: true, label: 'Low', pointRadius: 0, fill: false, data: statistics.timelines.deaths.relative.low, type: 'line', borderColor: 'rgba(245, 66, 66, 0.2)', backgroundColor: 'rgba(245, 66, 66, 0.2)'}
         ]" />
         <GenericTimelineChart :timelines="[
           { label: 'Cases', data: statistics.timelines.cases.relative.timeline, borderWidth: 2},
           { label: 'Mean', data: statistics.timelines.cases.relative.mean, type: 'line', borderColor: 'blue', pointRadius: 0, fill: false, borderWidth: 2},
-          { label: 'High', pointRadius: 0, fill: '+1', data: statistics.timelines.cases.relative.high, type: 'line', borderColor: 'rgba(66, 135, 245, 0.2)', backgroundColor: 'rgba(66, 135, 245, 0.2)'},
-          { label: 'Low', pointRadius: 0, fill: false, data: statistics.timelines.cases.relative.low, type: 'line', borderColor: 'rgba(66, 135, 245, 0.2)', backgroundColor: 'rgba(66, 135, 245, 0.2)'}
+          { hidden: true, label: 'High', pointRadius: 0, fill: '+1', data: statistics.timelines.cases.relative.high, type: 'line', borderColor: 'rgba(66, 135, 245, 0.2)', backgroundColor: 'rgba(66, 135, 245, 0.2)'},
+          { hidden: true, label: 'Low', pointRadius: 0, fill: false, data: statistics.timelines.cases.relative.low, type: 'line', borderColor: 'rgba(66, 135, 245, 0.2)', backgroundColor: 'rgba(66, 135, 245, 0.2)'}
         ]" />
         <GenericTimelineChart :timelines="[
           { label: 'Recovered', data: statistics.timelines.recovered.relative.timeline, borderWidth: 2},
           { label: 'Mean', data: statistics.timelines.recovered.relative.mean, type: 'line', borderColor: 'green', pointRadius: 0, fill: false, borderWidth: 2},
-          { label: 'High', pointRadius: 0, fill: '+1', data: statistics.timelines.recovered.relative.high, type: 'line', borderColor: 'rgba(66, 245, 96, 0.2)', backgroundColor: 'rgba(66, 245, 96, 0.2)'},
-          { label: 'Low', pointRadius: 0, fill: false, data: statistics.timelines.recovered.relative.low, type: 'line', borderColor: 'rgba(66, 245, 96, 0.2)', backgroundColor: 'rgba(66, 245, 96, 0.2)'}
+          { hidden: true, label: 'High', pointRadius: 0, fill: '+1', data: statistics.timelines.recovered.relative.high, type: 'line', borderColor: 'rgba(66, 245, 96, 0.2)', backgroundColor: 'rgba(66, 245, 96, 0.2)'},
+          { hidden: true, label: 'Low', pointRadius: 0, fill: false, data: statistics.timelines.recovered.relative.low, type: 'line', borderColor: 'rgba(66, 245, 96, 0.2)', backgroundColor: 'rgba(66, 245, 96, 0.2)'}
         ]" />
       </div>
     </CountryStatistics>

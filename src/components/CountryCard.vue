@@ -19,9 +19,9 @@
             :gradient="['#15b368', '#60e0a3', '#baffde']"
           />
         </template>
-        <div :class="$style['card-info']" v-else>
+        <!-- <div :class="$style['card-info']" v-else>
           <b-tag type="is-warning is-light">country doesn't provide any timeseries</b-tag>
-        </div>
+        </div> -->
       </div>
     </div>
     <div :class="[$style['card-row'], $style['sub-row']]">

@@ -33,7 +33,7 @@ export default {
           animationDuration: 0
         },
         responsiveAnimationDuration: 0,
-        aspectRatio: 1,
+        aspectRatio: 2,
         responsive: true,
         scales: {
           xAxes: [{

@@ -41,7 +41,9 @@ export default {
       const timelines = ['cases', 'deaths', 'recovered'].reduce((acc, type) => {
         const dataPoints = Object.keys(this.timelines[type]).map(dvmap(type))
         const dataList = new DataList(dataPoints)
-        const mean = this.coarse ? new SlidingWindow(dataList.relativ(), 28).mean() : new SlidingWindow(dataList.relativ(), 7).mean()
+        const mean = this.coarse
+          ? new SlidingWindow(dataList.relativ(), 28, false).mean()
+          : new SlidingWindow(dataList.relativ(), 7).mean()
 
         acc[type] = {
           absolute: {
