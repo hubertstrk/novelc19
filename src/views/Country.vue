@@ -1,30 +1,30 @@
 <template>
-  <div class="country-component">
+  <div :class="$style['country-component']">
     <CountryStatistics :iso3="this.$route.params.country" render-timeline>
       <div slot-scope="{statistics}">
         <h1 class="title is-1">{{statistics.country}}</h1>
 
-        <div class="info-group">
+        <div :class="$style['info-group']">
           <Tag success :value1="formatDate(statistics.updated)" :value2="formatTime(statistics.updated)" />
           <Tag danger value1="Population" :value2="formatNumber(statistics.population)" />
         </div>
 
-        <div class="info-group statistics">
+        <div :class="[$style['info-group'], $style['statistics']]">
           <StatisticDisplay text="Total Cases" :value="statistics.cases" centered />
           <StatisticDisplay text="Total Recovered" :value="statistics.recovered" centered />
           <StatisticDisplay text="Total Deaths" :value="statistics.deaths" centered />
         </div>
-        <div class="info-group statistics">
+        <div :class="[$style['info-group'], $style['statistics']]">
           <StatisticDisplay text="Today Cases" :value="statistics.todayCases" centered />
           <StatisticDisplay text="Today Recovered" :value="statistics.todayRecovered" centered />
           <StatisticDisplay text="Today Deaths" :value="statistics.todayDeaths" centered />
         </div>
-        <div class="info-group statistics">
+        <div :class="[$style['info-group'], $style['statistics']]">
           <StatisticDisplay text="Yesterday Cases" :value="statistics.yesterdayCases" centered />
           <StatisticDisplay text="Yesterday Recovered" :value="statistics.yesterdayRecovered" centered />
           <StatisticDisplay text="Yesterday Deaths" :value="statistics.yesterdayDeaths" centered />
         </div>
-        <div class="info-group statistics">
+        <div :class="[$style['info-group'], $style['statistics']]">
           <StatisticDisplay text="Tests Per Million" :value="statistics.testsPerOneMillion" centered />
           <StatisticDisplay text="Deaths Per Million" :value="statistics.deathsPerOneMillion" centered />
           <StatisticDisplay text="One Test Per People" :value="statistics.oneTestPerPeople" centered />
@@ -100,7 +100,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .country-component {
 
   display: flex;

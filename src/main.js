@@ -13,6 +13,8 @@ Vue.use(Buefy)
 
 Vue.config.productionTip = false
 
+Vue.prototype.$window = window
+
 new Vue({
   router,
   store,

@@ -12,6 +12,10 @@ export default {
     timelines: {
       type: Array,
       default: () => []
+    },
+    ratio: {
+      type: Number,
+      default: () => 1
     }
   },
   data () {
@@ -33,7 +37,7 @@ export default {
           animationDuration: 0
         },
         responsiveAnimationDuration: 0,
-        aspectRatio: 2,
+        aspectRatio: this.getRation(),
         responsive: true,
         scales: {
           xAxes: [{
@@ -68,6 +72,10 @@ export default {
     updateDataSets (timelines) {
       this.chart.data.datasets = timelines
       this.chart.update(0)
+    },
+    getRation () {
+      const mediaQuery = window.matchMedia('(min-width: 768px)')
+      return mediaQuery.matches ? 5 : 1
     }
   },
   mounted () {
