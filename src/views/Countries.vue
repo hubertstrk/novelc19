@@ -17,16 +17,16 @@
     </b-field>
     <div class="country-statistics">
       <template v-for="(iso3, index) in Object.keys(countries)">
-          <CountryStatistics :iso3="iso3" :key="index" coarse>
-            <div slot-scope="{statistics}">
+        <CountryStatistics :iso3="iso3" coarse :key="index">
+          <div slot-scope="{statistics}">
+            <router-link :to="{ name: 'country', params: {country: statistics.countryInfo.iso3} }">
               <CountryCard :statistics="statistics" :mode="mode">
-                <router-link v-if="statistics.countryInfo.iso3" :to="{ name: 'country', params: {country: statistics.countryInfo.iso3} }">
-                  <div class="title">{{statistics.country}}</div>
-                </router-link>
+                <div v-if="statistics.countryInfo.iso3" class="title">{{statistics.country}}</div>
                 <b-tag v-else type="is-danger is-light">undefined</b-tag>
               </CountryCard>
-            </div>
-          </CountryStatistics>
+            </router-link>
+          </div>
+        </CountryStatistics>
       </template>
     </div>
      <b-loading :is-full-page="false" :active.sync="isLoading" />
