@@ -19,9 +19,6 @@
             :gradient="['#15b368', '#60e0a3', '#baffde']"
           />
         </template>
-        <!-- <div :class="$style['card-info']" v-else>
-          <b-tag type="is-warning is-light">country doesn't provide any timeseries</b-tag>
-        </div> -->
       </div>
     </div>
     <div :class="[$style['card-row'], $style['sub-row']]">
@@ -87,12 +84,12 @@ export default {
 
     .card-title {
       display: flex;
-      flex: 1;
+      flex: 2;
     }
 
     .spark-lines {
       display: flex;
-      flex: 2;
+      flex: 1;
       justify-content: space-between;
     }
   }
@@ -102,4 +99,21 @@ export default {
     font-size: 0.8rem;
   }
 }
+
+@media only screen and (max-width: 768px) {
+  .card-component {
+    .card-row {
+      .card-title {
+        display: flex;
+        flex: 1;
+      }
+      .spark-lines {
+        display: flex;
+        flex: 2;
+        justify-content: space-between;
+      }
+    }
+  }
+}
+
 </style>

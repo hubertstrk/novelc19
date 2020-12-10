@@ -18,9 +18,9 @@ export class SlidingWindow {
    * Generates the windows based on the window size.
    */
   coarseWindows () {
-    const stopAt = this.dataPoints.length - (this.dataPoints.length % this.size)
-    const wins = range(0, stopAt, this.size)
-    return wins.map(item => this.dataPoints.slice(item, item + this.size))
+    const stopAt = this.dataPoints.length - (this.dataPoints.length % 14)
+    const wins = range(0, stopAt, 14)
+    return wins.map(item => this.dataPoints.slice(item, item + 14))
   }
 
   smoothWindows () {

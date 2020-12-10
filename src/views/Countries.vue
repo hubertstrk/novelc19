@@ -15,28 +15,18 @@
         <span>Yesterday</span>
       </b-radio-button>
     </b-field>
-
-    <section>
-      <b-input placeholder="Country..."
-        type="search"
-        icon="magnify"
-        v-model="search">
-      </b-input>
-    </section>
-    <div>
+    <div class="country-statistics">
       <template v-for="(iso3, index) in Object.keys(countries)">
-        <CountryStatistics :iso3="iso3" :key="index" coarse>
-          <div slot-scope="{statistics}">
-
-            <CountryCard :statistics="statistics" :mode="mode">
-              <router-link v-if="statistics.countryInfo.iso3" :to="{ name: 'country', params: {country: statistics.countryInfo.iso3} }">
-                <h4 class="subtitle is-5">{{statistics.country}}</h4>
-              </router-link>
-              <b-tag v-else type="is-danger is-light">undefined</b-tag>
-            </CountryCard>
-
-          </div>
-        </CountryStatistics>
+          <CountryStatistics :iso3="iso3" :key="index" coarse>
+            <div slot-scope="{statistics}">
+              <CountryCard :statistics="statistics" :mode="mode">
+                <router-link v-if="statistics.countryInfo.iso3" :to="{ name: 'country', params: {country: statistics.countryInfo.iso3} }">
+                  <div class="title">{{statistics.country}}</div>
+                </router-link>
+                <b-tag v-else type="is-danger is-light">undefined</b-tag>
+              </CountryCard>
+            </div>
+          </CountryStatistics>
       </template>
     </div>
      <b-loading :is-full-page="false" :active.sync="isLoading" />
@@ -104,4 +94,15 @@ export default {
   flex-direction: column;
   flex: 1;
 }
+
+.title {
+  font-size: 2rem;
+}
+
+@media only screen and (max-width: 768px) {
+  .title {
+    font-size: 1.4rem;
+  }
+}
+
 </style>
