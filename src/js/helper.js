@@ -1,6 +1,6 @@
 const squash = (precision) => (string, value) => {
   if (value < 1000) return value
-  else if (value >= 1000 && value < 1000000) return `${(value / 1000).toFixed(precision)} K`
+  else if (value >= 1000 && value < 1000000) return `${(value / 1000).toFixed(precision)} T`
   else return `${(value / 1000000).toFixed(precision)} M`
 }
 
